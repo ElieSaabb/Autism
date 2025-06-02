@@ -1,0 +1,68 @@
+#!/bin/bash
+. /home/linah03/Projects/ESD/cli/functions.sh
+
+
+#----------------------------------------------------------------------#
+# ON COMPUTE CANADA
+RootPath=/home/linah03/Projects/ESD
+# ON PERSONAL COMPUTER
+#RootPath=/home/hussein/WorSpace/LBW/ESD/ESD_maindev
+
+scriptdir=/home/linah03/project
+scriptname=sbatch_train_model_patient_specific.sh
+
+scheme=general
+RootName=results_patientwise_v2704
+
+LogRootPath=/scratch/linah03/${RootName}/${scheme}
+LogsErrorsBasePath=${LogRootPath}/EOlogs
+logdir=${LogsErrorsBasePath}/out
+errordir=${LogsErrorsBasePath}/error
+mkdir -p ${logdir}
+mkdir -p ${errordir}
+
+
+#----------------------------------------------------------------------#
+_general_model_='False'
+_custome_batch_="True False"
+_train_='ECG EEG'
+_model_types_='bilstm wavenet_bilstm' # wavenet
+#_patient_ids_='aaaaanme aaaaajdn aaaaajru aaaaanme aaaaanmh aaaaapkd aaaaarsm aaaaatds aaaaakkm aaaaakfo'
+_patient_ids_=`cut -d',' -f1 /home/linah03/Projects/ESD/helpers/filtered_patient_seizure_stats.csv | tail -n +2`
+
+outputdir_=/scratch/linah03/${RootName}/THUSZ/${scheme}
+
+#----------------------------------------------------------------------#
+
+cd /home/linah03/project
+
+
+for custome_batch in ${_custome_batch_}; do
+ outputdir=${outputdir_}/${custome_batch}
+ logdir=${LogsErrorsBasePath}/out
+ errordir=${LogsErrorsBasePath}/error
+ mkdir -p ${logdir}
+ mkdir -p ${errordir}
+
+ for train in $_train_; do
+   for model_types in $_model_types_; do
+      for patient_ids in $_patient_ids_; do
+
+        label=tmps_${patient_ids}_${train}_${model_types}_${custome_batch}
+        outfile=$(find_next_run ${logdir} ${label})
+        f="$(basename -- $outfile)"
+        mkdir -p ${errordir}/${label}
+        errorfile=${errordir}/${label}/${f}
+
+        echo sbatch --job-name=${label} --output=${outfile}.out --error=${errorfile}.out ${scriptdir}/${scriptname} ${train} ${model_types} ${patient_ids} ${outputdir} ${custome_batch} ${general_model}
+
+        RES=$(sbatch --job-name=${label} --output=${outfile}.out --error=${errorfile}.out ${scriptdir}/${scriptname} ${train} ${model_types} ${patient_ids} ${outputdir} ${custome_batch} ${general_model})
+        echo ${RES}
+        [ -e ${outfile}.id ] && rm ${outfile}.id
+        echo ${RES##* } > ${outfile}.id
+
+      done
+    done
+ done
+done
+#----------------------------------------------------------------------#
