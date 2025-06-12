@@ -16,6 +16,9 @@ def main():
     # === Load data file paths ===
     filepaths = sorted(glob(os.path.join(data_dir, "*.nii.gz")))
 
+    all_fp = sorted(glob.glob(os.path.join(data_dir, '*.nii.gz')))
+    filepaths  = [p for p in all_fp if os.path.basename(p).startswith('NYU_')]
+
     # === Load labels ===
     label_dict = load_phenotypic_labels(pheno_csv, site_filter="NYU")
     labels = get_labels_from_filenames(filepaths, label_dict)
