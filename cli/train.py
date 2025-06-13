@@ -1,7 +1,7 @@
 # cli/train.py
 
 import os
-from glob import glob
+from glob import glob 
 
 from data_pipelines.dataloaders import prepare_dataset
 from helpers.utils import load_phenotypic_labels, get_labels_from_filenames
@@ -10,13 +10,13 @@ from model.cnn3d import build_3dcnn
 
 def main():
     # === PATHS ===
-    data_dir = "/home/linah03/Projects/Autism/dataset/func_mean_fcm_resized"
-    pheno_csv = "/home/linah03/Projects/Autism/dataset/phenotypic_NYU.csv"
+    data_dir = "/scratch/linah03/Autism/dataset/Outputs/cpac/filt_noglobal/func_preproc/"
+    pheno_csv = "/scratch/linah03/Autism/dataset/phenotypic_NYU.csv"
 
     # === Load data file paths ===
     filepaths = sorted(glob(os.path.join(data_dir, "*.nii.gz")))
 
-    all_fp = sorted(glob.glob(os.path.join(data_dir, '*.nii.gz')))
+    all_fp = sorted(glob(os.path.join(data_dir, '*.nii.gz')))
     filepaths  = [p for p in all_fp if os.path.basename(p).startswith('NYU_')]
 
     # === Load labels ===

@@ -5,26 +5,45 @@ import numpy as np
 import nibabel as nib
 from sklearn.model_selection import train_test_split
 from data_pipelines.preprocessing import rescale_volume, resize_volume
+from data_pipelines.preprocessing import collapse_and_fcm
+
 
 TARGET_SHAPE = (64, 64, 64)
 
 
-def load_volume(path):
-    img = nib.load(path)
-    data = img.get_fdata().astype(np.float32)
-    data = rescale_volume(data)
-    data = resize_volume(data, TARGET_SHAPE)
-    return data[..., None]  # add channel dim
+COLLAPSE_OUT_DIR = "/scratch/linah03/Autism/dataset/Outputs/cpac/filt_noglobal/3d_data"
+os.makedirs(COLLAPSE_OUT_DIR, exist_ok=True)
 
+def load_volume(path):
+    # 1) Load the 4D image
+    img4d  = nib.load(path)
+
+
+    # 2) Build output filename for the collapsed 3D NIfTI
+    base      = os.path.basename(path)
+    subj      = base.replace("_func_preproc.nii.gz", "")  # adjust suffix if needed
+    out_fname = f"{subj}_collapsed_fcm.nii.gz"
+    out_path  = os.path.join(COLLAPSE_OUT_DIR, out_fname)
+
+    # 3) Collapse & save: pass both in_4d and out_path
+    data3d = collapse_and_fcm(img4d, out_path)  # returns the 3D NumPy array
+
+    # 4) Resize for your network
+    data_resized = resize_volume(data3d, TARGET_SHAPE)
+    return data_resized
 
 def load_volumes(paths):
-    X = np.zeros((len(paths),) + TARGET_SHAPE + (1,), dtype=np.float32)
+    X = np.zeros((len(paths),) + TARGET_SHAPE, dtype=np.float32)
     for i, p in enumerate(paths):
         X[i] = load_volume(p)
     return X
 
 
 def prepare_dataset(filepaths, labels, test_size=0.2, random_state=42):
+
+    print(f"[DEBUG] prepare_dataset got {len(filepaths)} files, e.g.: {filepaths[:5]}")
+
+
     subjects = np.array([os.path.basename(f).split('_')[1] for f in filepaths])
     X_paths = np.array(filepaths)
     y_labels = np.array(labels)

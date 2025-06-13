@@ -47,6 +47,8 @@ def collapse_and_fcm(in_4d, out_3d, n_clusters=3, m=2., error=0.005, maxiter=100
 
     nib.save(nib.Nifti1Image(norm_data, mean_img_3d.affine, mean_img_3d.header), out_3d)
 
+    return norm_data
+
 
 def rescale_volume(data):
     mask = data > 0
