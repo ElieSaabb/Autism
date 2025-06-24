@@ -11,7 +11,7 @@ from data_pipelines.preprocessing import collapse_and_fcm
 TARGET_SHAPE = (64, 64, 64)
 
 
-COLLAPSE_OUT_DIR = "/scratch/linah03/Autism/dataset/Outputs/cpac/filt_noglobal/3d_data"
+COLLAPSE_OUT_DIR = "/lustre04/scratch/linah03/Datasets/ABIDE/Outputs/cpac/filt_global/3d_data"
 os.makedirs(COLLAPSE_OUT_DIR, exist_ok=True)
 
 def load_volume(path):
