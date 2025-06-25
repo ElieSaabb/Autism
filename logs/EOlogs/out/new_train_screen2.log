@@ -1,0 +1,71 @@
+2025-06-25 02:20:23.947251: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:485] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2025-06-25 02:20:25.045449: E external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:8454] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2025-06-25 02:20:25.284664: E external/local_xla/xla/stream_executor/cuda/cuda_blas.cc:1452] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2025-06-25 02:20:27.445611: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2025-06-25 02:25:11.367954: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+2025-06-25 02:33:37.214381: E external/local_xla/xla/stream_executor/cuda/cuda_driver.cc:266] failed call to cuInit: CUDA_ERROR_MPS_CONNECTION_FAILED: MPS client failed to connect to the MPS control daemon or the MPS server
+Loading preprocessed data...
+Shapes before expand: X_train=(136, 64, 64, 64), X_test=(35, 64, 64, 64)
+Labels: y_train=(136,), y_test=(35,)
+Shapes after expand: X_train=(136, 64, 64, 64, 1), X_test=(35, 64, 64, 64, 1)
+Building 3D CNN model...
+Model: "ASD_3D_CNN"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━┓
+┃ Layer (type)                    ┃ Output Shape           ┃       Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━┩
+│ input_layer (InputLayer)        │ (None, 64, 64, 64, 1)  │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ conv3d (Conv3D)                 │ (None, 64, 64, 64, 64) │         1,792 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ max_pooling3d (MaxPooling3D)    │ (None, 32, 32, 32, 64) │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ batch_normalization             │ (None, 32, 32, 32, 64) │           256 │
+│ (BatchNormalization)            │                        │               │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ conv3d_1 (Conv3D)               │ (None, 32, 32, 32, 64) │       110,656 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ max_pooling3d_1 (MaxPooling3D)  │ (None, 16, 16, 16, 64) │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ batch_normalization_1           │ (None, 16, 16, 16, 64) │           256 │
+│ (BatchNormalization)            │                        │               │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ conv3d_2 (Conv3D)               │ (None, 16, 16, 16,     │       221,312 │
+│                                 │ 128)                   │               │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ max_pooling3d_2 (MaxPooling3D)  │ (None, 8, 8, 8, 128)   │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ batch_normalization_2           │ (None, 8, 8, 8, 128)   │           512 │
+│ (BatchNormalization)            │                        │               │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ conv3d_3 (Conv3D)               │ (None, 8, 8, 8, 256)   │       884,992 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ max_pooling3d_3 (MaxPooling3D)  │ (None, 4, 4, 4, 256)   │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ batch_normalization_3           │ (None, 4, 4, 4, 256)   │         1,024 │
+│ (BatchNormalization)            │                        │               │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ global_average_pooling3d        │ (None, 256)            │             0 │
+│ (GlobalAveragePooling3D)        │                        │               │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dense (Dense)                   │ (None, 512)            │       131,584 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dropout (Dropout)               │ (None, 512)            │             0 │
+├─────────────────────────────────┼────────────────────────┼───────────────┤
+│ dense_1 (Dense)                 │ (None, 1)              │           513 │
+└─────────────────────────────────┴────────────────────────┴───────────────┘
+ Total params: 1,352,897 (5.16 MB)
+ Trainable params: 1,351,873 (5.16 MB)
+ Non-trainable params: 1,024 (4.00 KB)
+Starting training...
+Traceback (most recent call last):
+  File "/lustre04/scratch/linah03/Autism/cli/train.py", line 63, in <module>
+    main()
+  File "/lustre04/scratch/linah03/Autism/cli/train.py", line 48, in main
+    model.fit(
+  File "/lustre04/scratch/linah03/Autism/venvAutism/lib/python3.11/site-packages/keras/src/utils/traceback_utils.py", line 122, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "/lustre04/scratch/linah03/Autism/venvAutism/lib/python3.11/site-packages/keras/src/utils/traceback_utils.py", line 117, in error_handler
+    return fn(*args, **kwargs)
+                  ^^^^^^^^^^^^^
+TypeError: TensorFlowTrainer.fit() got an unexpected keyword argument 'use_multiprocessing'

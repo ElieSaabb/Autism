@@ -1,0 +1,6 @@
+/localscratch/spool/slurmd/job56710064/slurm_script: line 25: /home/linah03/venvAutism/bin/activate: No such file or directory
+Traceback (most recent call last):
+  File "/lustre04/scratch/linah03/Autism/cli/train.py", line 4, in <module>
+srun: error: bg11709: task 0: Exited with exit code 1
+    import numpy as np
+ModuleNotFoundError: No module named 'numpy'
