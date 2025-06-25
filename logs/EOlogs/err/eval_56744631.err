@@ -1,0 +1,2 @@
+/lustre04/scratch/linah03/WorkSpace_ELI/Autism/venvAutism/bin/python: can't open file '/lustre04/scratch/linah03/WorkSpace_ELI/Autism/cli/evaluate.py': [Errno 2] No such file or directory
+srun: error: bg12010: task 0: Exited with exit code 2

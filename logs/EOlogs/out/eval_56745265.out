@@ -1,0 +1,11 @@
+loading required server modules
+module load cuda cudnn
+activating env
+Setting PYTHONPATH
+checking python
+/lustre04/scratch/linah03/WorkSpace_ELI/Autism/venvAutism/bin/python
+running python job
+Starting evaluation…
+Loading model from /lustre04/scratch/linah03/WorkSpace_ELI/Autism/model/asd_3dcnn.h5
+Loading test data...
+Done.

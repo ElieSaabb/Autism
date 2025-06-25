@@ -4,7 +4,7 @@
 #SBATCH --gres=gpu:1                      # 1 GPU
 #SBATCH --nodes=1                         # 1 node
 #SBATCH --cpus-per-task=4                 # 4 CPU cores
-#SBATCH --mem=32768M                      # 32 GB RAM (in multiples of 1024M)
+#SBATCH --mem=65536M                      # 64 GB RAM (in multiples of 1024M)
 #SBATCH --time=12:00:00                   # walltime hh:mm:ss
 #SBATCH --output=/scratch/linah03/Autism/logs/EOlogs/out/train_%j.out
 #SBATCH --error=/scratch/linah03/Autism/logs/EOlogs/err/train_%j.err
@@ -26,5 +26,7 @@ which python
 echo running python job
 cd /lustre04/scratch/linah03/WorkSpace_ELI/Autism
 
-#srun python cli/train.py
-python cli/train.py
+export PYTHONPATH=$PWD:$PYTHONPATH
+
+srun python cli/train.py
+
