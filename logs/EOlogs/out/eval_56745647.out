@@ -1,0 +1,33 @@
+loading required server modules
+module load cuda cudnn
+activating env
+Setting PYTHONPATH
+checking python
+/lustre04/scratch/linah03/WorkSpace_ELI/Autism/venvAutism/bin/python
+running python job
+Starting evaluation…
+Loading model from /lustre04/scratch/linah03/WorkSpace_ELI/Autism/model/asd_3dcnn.h5
+Loading test data...
+Evaluating on test set...
+[1m1/5[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m19s[0m 5s/step - accuracy: 0.3750 - loss: 5.2626[1m4/5[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 20ms/step - accuracy: 0.4271 - loss: 4.3334[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 175ms/step - accuracy: 0.4388 - loss: 4.2078[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m6s[0m 184ms/step - accuracy: 0.4466 - loss: 4.1240
+
+Test loss: 3.7054
+Test accuracy: 0.4857
+
+Generating predictions...
+[1m1/5[0m [32m━━━━[0m[37m━━━━━━━━━━━━━━━━[0m [1m2s[0m 723ms/step[1m4/5[0m [32m━━━━━━━━━━━━━━━━[0m[37m━━━━[0m [1m0s[0m 17ms/step [1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m0s[0m 189ms/step[1m5/5[0m [32m━━━━━━━━━━━━━━━━━━━━[0m[37m[0m [1m1s[0m 193ms/step
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0     0.7500    0.1500    0.2500        20
+           1     0.4516    0.9333    0.6087        15
+
+    accuracy                         0.4857        35
+   macro avg     0.6008    0.5417    0.4293        35
+weighted avg     0.6221    0.4857    0.4037        35
+
+Confusion Matrix:
+[[ 3 17]
+ [ 1 14]]
+Done.
